@@ -7,7 +7,9 @@ import {
 } from "../utils/types/index.types";
 
 import { Ionicons } from "@expo/vector-icons";
-import { TouchableOpacity, StatusBar } from "react-native";
+import { TouchableOpacity, StatusBar, Linking, ScrollView } from "react-native";
+import Markdown from "react-native-showdown";
+// import { WebView } from "react-native-webview";
 
 interface ISectionScreen {
   navigation: SectionScreenNavigationProp;
@@ -28,35 +30,111 @@ const SectionScreen: React.FC<ISectionScreen> = ({ route, navigation }) => {
   }, [route]);
 
   return (
-    <Container>
-      <StatusBar hidden />
-      <Cover>
-        <Image source={section?.image} />
-        <Wrapper>
-          <Logo source={section?.logo} />
-          <Subtitle>{section?.subtitle}</Subtitle>
-        </Wrapper>
-        <Title>{section?.title}</Title>
-        <Caption>{section?.caption}</Caption>
-      </Cover>
-      <TouchableOpacity
-        style={{ position: "absolute", top: 20, right: 20 }}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        <CloseView>
-          <Ionicons
-            name="md-close"
-            size={36}
-            color="#4775f2"
-            style={{ marginTop: -2 }}
+    <ScrollView>
+      <Container>
+        <StatusBar hidden />
+        <Cover>
+          <Image source={section?.image} />
+          <Wrapper>
+            <Logo source={section?.logo} />
+            <Subtitle>{section?.subtitle}</Subtitle>
+          </Wrapper>
+          <Title>{section?.title}</Title>
+          <Caption>{section?.caption}</Caption>
+        </Cover>
+        <TouchableOpacity
+          style={{ position: "absolute", top: 20, right: 20 }}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <CloseView>
+            <Ionicons
+              name="md-close"
+              size={36}
+              color="#4775f2"
+              style={{ marginTop: -2 }}
+            />
+          </CloseView>
+        </TouchableOpacity>
+        <Content>
+          {/* <WebView
+          source={{ html: htmlStyles + section?.content }}
+          scalesPageToFit={false}
+          scrollEnabled={false}
+          onShouldStartLoadWithRequest={({ url }) => {
+            if (url.includes("https://github.com/eddyhdzg")) {
+              Linking.openURL(url);
+              return false;
+            }
+            return true;
+          }}
+        /> */}
+          <Markdown
+            markdown={section?.content}
+            pureCSS={htmlStyles}
+            scalesPageToFit={false}
+            scrollEnabled={false}
           />
-        </CloseView>
-      </TouchableOpacity>
-    </Container>
+        </Content>
+      </Container>
+    </ScrollView>
   );
 };
+
+// const htmlContent = `
+//   <h2>this is a title</h2>
+//   <p>This <strong>is</strong> a <a href="https://github.com/eddyhdzg"> link </a> </p>
+//   <img src="https://pbs.twimg.com/profile_images/1263350139504091137/9Td-sIYZ_400x400.jpg "/>
+// `;
+
+const htmlStyles = `
+<style>
+  * {
+    font-family: -apple-system;
+        margin: 0;
+        padding: 0;
+    font-size: 17px;
+    font-weight: normal;
+    color: #3c4560;
+    line-height: 24px;
+  }
+
+  h2 {
+    font-size: 20px;
+    text-transform: uppercase;
+    color: #b8bece;
+    font-weight: 600;
+    margin-top: 50px;
+  }
+
+    p {
+      margin-top: 20px;
+  }
+
+  a {
+    color: #4775f2;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  strong {
+    font-weight: 700;
+  }
+
+  img {
+    width: 100%;
+    margin-top: 20px;
+      border-radius: 10px;
+  }
+
+</style>
+`;
+
+const Content = styled.View`
+  height: 1000px;
+  padding: 12px;
+`;
 
 const Container = styled.View`
   flex: 1;

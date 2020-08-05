@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { items } from "../utils/constants";
 
 const screenHeight = Dimensions.get("window").height;
+const screenWidth = Dimensions.get("window").width;
 
 const mapStateToProps = (state: any) => {
   return {
@@ -30,9 +31,22 @@ interface Menu {
 
 const Menu: React.FC<Menu> = ({ action, closeMenu }) => {
   const [top, setTop] = useState(new Animated.Value(screenHeight));
+  const [width, setWidth] = useState(screenWidth);
+
+  const handleResize = () => {
+    if (screenWidth < 1000) {
+      setWidth(screenWidth);
+    } else {
+      setWidth(screenWidth / 2);
+    }
+  };
 
   useEffect(() => {
     toggleMenu();
+    Dimensions.addEventListener("change", handleResize);
+    return () => {
+      Dimensions.removeEventListener("change", handleResize);
+    };
   }, [action]);
 
   const toggleMenu = () => {
@@ -50,7 +64,7 @@ const Menu: React.FC<Menu> = ({ action, closeMenu }) => {
   };
 
   return (
-    <AnimatedContainer style={{ top }}>
+    <AnimatedContainer style={{ top, width }}>
       <Cover>
         <Image source={require("../assets/background2.jpg")} />
         <Title>Eddy</Title>
@@ -110,7 +124,7 @@ const CloseView = styled.View`
 const Container = styled.View`
   position: absolute;
   background: white;
-  width: 100%;
+  align-self: center;
   height: 100%;
   z-index: 100;
   border-radius: 10px;

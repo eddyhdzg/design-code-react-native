@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import { ImageSourcePropType } from "react-native";
+import { Dimensions } from "react-native";
+
+const screenWidth = Dimensions.get("window").width;
 
 interface Course {
   title: string;
@@ -21,8 +24,26 @@ const Course: React.FC<Course> = ({
   subtitle,
   author,
 }) => {
+  const [width, setWidth] = useState(screenWidth - 40);
+
+  const handleResize = () => {
+    if (screenWidth < 768) {
+      setWidth(screenWidth - 40);
+    } else if (screenWidth < 1024) {
+      setWidth((screenWidth - 160) / 2);
+    } else {
+      setWidth((screenWidth - 80) / 3);
+    }
+  };
+
+  useEffect(() => {
+    Dimensions.addEventListener("change", handleResize);
+    return () => {
+      Dimensions.removeEventListener("change", handleResize);
+    };
+  }, []);
   return (
-    <Container>
+    <Container style={{ width }}>
       <Cover>
         <Image source={image} />
         <Logo source={logo} resizeMode="contain" />
@@ -46,7 +67,7 @@ const Container = styled.View`
   border-radius: 14px;
   background: white;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-  margin: 15px 10px;
+  margin: 15px;
 `;
 
 const Cover = styled.View`

@@ -4,7 +4,7 @@ import { ImageSourcePropType } from "react-native";
 
 interface Card {
   title: string;
-  image: ImageSourcePropType;
+  image: any;
   logo: ImageSourcePropType;
   caption: string;
   subtitle: string;
@@ -12,9 +12,9 @@ interface Card {
 
 const Card: React.FC<Card> = ({ title, image, logo, caption, subtitle }) => {
   return (
-    <Container>
+    <Container style={{ elevation: 10 }}>
       <Cover>
-        <Image source={image} />
+        <Image source={{ ...image, uri: image.url }} />
         <Title>{title}</Title>
       </Cover>
       <Content>
@@ -62,8 +62,7 @@ const Container = styled.View`
   width: 315px;
   height: 280px;
   border-radius: 14px;
-  margin-left: 20px;
-  margin-top: 20px;
+  margin: 20px 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 `;
 

@@ -6,6 +6,7 @@ import {
   Animated,
   Easing,
   StatusBar,
+  Platform,
 } from "react-native";
 import styled from "styled-components/native";
 import Card from "../components/Card";
@@ -55,6 +56,9 @@ const HomeScreen: React.FC<HomeScreen> = ({
 
   useEffect(() => {
     toggleMenu();
+    if (Platform.OS == "android") {
+      StatusBar.setBarStyle("light-content", true);
+    }
   }, [action]);
 
   const toggleMenu = () => {
@@ -126,28 +130,30 @@ const HomeScreen: React.FC<HomeScreen> = ({
               {loading ? (
                 <Loading>Loading...</Loading>
               ) : (
-                data?.cardsCollection.items.map(
-                  (card: section, index: number) => (
-                    <TouchableOpacity
-                      key={index}
-                      onPress={() =>
-                        navigation.push("Section", {
-                          section: card,
-                        })
-                      }
-                    >
-                      <Card {...card} />
-                    </TouchableOpacity>
-                  )
-                )
+                <CardsContainer>
+                  {data?.cardsCollection.items.map(
+                    (card: section, index: number) => (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() =>
+                          navigation.push("Section", {
+                            section: card,
+                          })
+                        }
+                      >
+                        <Card {...card} />
+                      </TouchableOpacity>
+                    )
+                  )}
+                </CardsContainer>
               )}
             </HScrollView>
             <Subtitle>Popular Courses</Subtitle>
-            <HScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <CoursesContainer>
               {courses.map((course, index) => (
                 <Course key={index} {...course} />
               ))}
-            </HScrollView>
+            </CoursesContainer>
           </VScrollView>
         </SafeAreaView>
       </AnimatedContainer>
@@ -163,6 +169,12 @@ const VScrollView = styled.ScrollView`
 
 const HScrollView = styled.ScrollView`
   padding-bottom: 30px;
+`;
+
+const CoursesContainer = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 `;
 
 const Subtitle = styled.Text`
@@ -206,3 +218,8 @@ const RootView = styled.View`
 `;
 
 const Loading = styled.Text``;
+
+const CardsContainer = styled.View`
+  flex-direction: row;
+  padding-left: 10px;
+`;

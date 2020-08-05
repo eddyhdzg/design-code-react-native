@@ -28,15 +28,9 @@ interface Avatar {
 }
 
 const Avatar: React.FC<Avatar> = ({ updateName }) => {
-  const [photo, setPhoto] = useState(require("../assets/eddy.jpg"));
+  const [photo] = useState(require("../assets/eddy.jpg"));
 
   useEffect(() => {
-    // fetch(uinamesPath).then((response) => {
-    //   response.json().then((res) => {
-    //     setPhoto(res.photo);
-    //     updateName(res.name);
-    //   });
-    // });
     updateName("Eddy");
   }, []);
   return <Image source={photo} />;

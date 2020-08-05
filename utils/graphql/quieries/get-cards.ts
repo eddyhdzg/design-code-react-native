@@ -27,6 +27,7 @@ const GET_CARDS = gql`
           width
           height
         }
+        content
       }
     }
   }
