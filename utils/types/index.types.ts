@@ -41,7 +41,7 @@ export type section = {
   subtitle: string;
   caption: string;
   logo: ImageSourcePropType;
-  content: any;
+  content?: any;
 };
 
 export type cardsCollection = {
