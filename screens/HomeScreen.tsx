@@ -20,6 +20,7 @@ import { StackNavigationProp } from "react-navigation-stack/lib/typescript/src/v
 import { section } from "../utils/types/index.types";
 import { useCards } from "../utils/graphql/hooks";
 import { courses, logos } from "../utils/constants";
+import ModalLogin from "../components/modalLogin/ModalLogin";
 
 const mapStateToProps = (state: any) => {
   return {
@@ -34,6 +35,10 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "OPEN_MENU",
       }),
+    openLogin: () =>
+      dispatch({
+        type: "OPEN_LOGIN",
+      }),
   };
 };
 
@@ -41,6 +46,7 @@ interface HomeScreen {
   action: "openMenu" | "closeMenu";
   name: string;
   openMenu: () => void;
+  openLogin: () => void;
   navigation: StackNavigationProp;
 }
 
@@ -48,6 +54,7 @@ const HomeScreen: React.FC<HomeScreen> = ({
   action,
   name,
   openMenu,
+  openLogin,
   navigation,
 }) => {
   const [scale] = useState(new Animated.Value(1));
@@ -91,6 +98,14 @@ const HomeScreen: React.FC<HomeScreen> = ({
     }
   };
 
+  const handleAvatar = () => {
+    if (name) {
+      openMenu();
+    } else {
+      openLogin();
+    }
+  };
+
   return (
     <RootView>
       <Menu />
@@ -99,7 +114,7 @@ const HomeScreen: React.FC<HomeScreen> = ({
           <VScrollView>
             <TitleBar>
               <TouchableOpacity
-                onPress={openMenu}
+                onPress={handleAvatar}
                 style={{ position: "absolute", top: 0, left: 20 }}
               >
                 <Avatar />
@@ -157,6 +172,7 @@ const HomeScreen: React.FC<HomeScreen> = ({
           </VScrollView>
         </SafeAreaView>
       </AnimatedContainer>
+      <ModalLogin />
     </RootView>
   );
 };

@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
-import { Animated, TouchableOpacity, Dimensions } from "react-native";
+import {
+  Animated,
+  TouchableOpacity,
+  Dimensions,
+  AsyncStorage,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import MenuItem from "./MenuItem";
 import { connect } from "react-redux";
@@ -21,16 +26,33 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({
         type: "CLOSE_MENU",
       }),
+    updateName: (name: string) =>
+      dispatch({
+        type: "UPDATE_NAME",
+        name,
+      }),
+    updateAvatar: (avatar: string) =>
+      dispatch({
+        type: "UPDATE_AVATAR",
+        avatar,
+      }),
   };
 };
 
 interface Menu {
   action: "openMenu" | "closeMenu";
   closeMenu: () => void;
+  updateName: (name: string) => void;
+  updateAvatar: (name: string) => void;
 }
 
-const Menu: React.FC<Menu> = ({ action, closeMenu }) => {
-  const [top, setTop] = useState(new Animated.Value(screenHeight));
+const Menu: React.FC<Menu> = ({
+  action,
+  closeMenu,
+  updateName,
+  updateAvatar,
+}) => {
+  const [top] = useState(new Animated.Value(screenHeight));
   const [width, setWidth] = useState(screenWidth);
 
   const handleResize = () => {
@@ -63,6 +85,16 @@ const Menu: React.FC<Menu> = ({ action, closeMenu }) => {
     }
   };
 
+  const handleMenu = (index: number) => {
+    if (index === 3) {
+      closeMenu();
+      updateName("");
+      updateName("Stranger");
+      updateAvatar("https://cl.ly/55da82beb939/download/avatar-default.jpg");
+      AsyncStorage.clear();
+    }
+  };
+
   return (
     <AnimatedContainer style={{ top, width }}>
       <Cover>
@@ -85,8 +117,15 @@ const Menu: React.FC<Menu> = ({ action, closeMenu }) => {
         </CloseView>
       </TouchableOpacity>
       <Content>
-        {items.map(({ title, icon, text }) => (
-          <MenuItem key={title} icon={icon} text={text} title={title} />
+        {items.map(({ title, icon, text }, index) => (
+          <TouchableOpacity
+            key={title}
+            onPress={() => {
+              handleMenu(index);
+            }}
+          >
+            <MenuItem icon={icon} text={text} title={title} />
+          </TouchableOpacity>
         ))}
       </Content>
     </AnimatedContainer>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import { connect } from "react-redux";
+import { AsyncStorage } from "react-native";
 
 // const defaultAvatar =
 //   "https://ramcotubular.com/wp-content/uploads/default-avatar.jpg";
@@ -10,6 +11,7 @@ import { connect } from "react-redux";
 const mapStateToProps = (state: any) => {
   return {
     name: state.name,
+    avatar: state.avatar,
   };
 };
 
@@ -20,20 +22,38 @@ const mapDispatchToProps = (dispatch: any) => {
         type: "UPDATE_NAME",
         name,
       }),
+    updateAvatar: (avatar: string) =>
+      dispatch({
+        type: "UPDATE_AVATAR",
+        avatar,
+      }),
   };
 };
 
 interface Avatar {
+  avatar: any;
   updateName: (name: string) => void;
+  updateAvatar: (name: string) => void;
 }
 
-const Avatar: React.FC<Avatar> = ({ updateName }) => {
-  const [photo] = useState(require("../assets/eddy.jpg"));
+const Avatar: React.FC<Avatar> = ({ avatar, updateName, updateAvatar }) => {
+  console.log(avatar);
+  const loadState = () => {
+    AsyncStorage.getItem("state").then((serializedState: any) => {
+      const state = JSON.parse(serializedState);
+
+      if (state) {
+        updateName(state.name);
+        updateAvatar(state.avatar);
+      }
+    });
+  };
 
   useEffect(() => {
-    updateName("Eddy");
+    // updateName("Eddy");
+    loadState();
   }, []);
-  return <Image source={photo} />;
+  return <Image source={{ uri: avatar }} />;
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Avatar);

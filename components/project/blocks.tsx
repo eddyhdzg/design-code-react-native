@@ -1,28 +1,6 @@
-import React from "react";
 import styled from "styled-components/native";
-import { ImageSourcePropType } from "react-native";
-
-interface Project {
-  author: string;
-  image: ImageSourcePropType;
-  text: string;
-  title: string;
-}
-
-const Project: React.FC<Project> = ({ author, image, text, title }) => {
-  return (
-    <Container>
-      <Cover>
-        <Image source={image} />
-        <Title>{title}</Title>
-        <Author>by {author}</Author>
-      </Cover>
-      <Text>{text}</Text>
-    </Container>
-  );
-};
-
-export default Project;
+import { Animated } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 const Container = styled.View`
   width: 315px;
@@ -32,14 +10,16 @@ const Container = styled.View`
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 `;
 
-const Cover = styled.View`
+export const AnimatedContainer = Animated.createAnimatedComponent(Container);
+
+export const Cover = styled.View`
   height: 290px;
   border-top-left-radius: 14px;
   border-top-right-radius: 14px;
   overflow: hidden;
 `;
 
-const Image = styled.Image`
+export const Image = styled.Image`
   width: 100%;
   height: 290px;
 `;
@@ -53,8 +33,9 @@ const Title = styled.Text`
   color: white;
   width: 300px;
 `;
+export const AnimatedTitle = Animated.createAnimatedComponent(Title);
 
-const Author = styled.Text`
+export const Author = styled.Text`
   position: absolute;
   bottom: 20px;
   left: 20px;
@@ -70,3 +51,20 @@ const Text = styled.Text`
   line-height: 24px;
   color: #3c4560;
 `;
+
+export const AnimatedText = Animated.createAnimatedComponent(Text);
+
+const CloseView = styled.View`
+  width: 32px;
+  height: 32px;
+  background: white;
+  border-radius: 16px;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const AnimatedCloseView = Animated.createAnimatedComponent(CloseView);
+
+export const AnimatedLinearGradient = Animated.createAnimatedComponent(
+  LinearGradient
+);

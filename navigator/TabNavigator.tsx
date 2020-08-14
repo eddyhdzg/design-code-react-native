@@ -70,20 +70,6 @@ export default function TabNavigator() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen
-          name="Projects"
-          component={ProjectsStackScreen}
-          options={{
-            tabBarLabel: "Projects",
-            tabBarIcon: ({ focused }) => (
-              <Ionicons
-                name="md-folder"
-                size={26}
-                color={focused ? activeColor : inactiveColor}
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
           name="Home"
           component={HomeStackScreen}
           options={{
@@ -97,6 +83,7 @@ export default function TabNavigator() {
             ),
           }}
         />
+
         <Tab.Screen
           name="Courses"
           component={CoursesStackScreen}
@@ -105,6 +92,20 @@ export default function TabNavigator() {
             tabBarIcon: ({ focused }) => (
               <Ionicons
                 name="md-albums"
+                size={26}
+                color={focused ? activeColor : inactiveColor}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Projects"
+          component={ProjectsStackScreen}
+          options={{
+            tabBarLabel: "Projects",
+            tabBarIcon: ({ focused }) => (
+              <Ionicons
+                name="md-folder"
                 size={26}
                 color={focused ? activeColor : inactiveColor}
               />
